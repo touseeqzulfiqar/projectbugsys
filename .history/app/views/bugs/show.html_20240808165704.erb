@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @bug %>
+
+<div>
+  <%= link_to "Edit this bug", edit_project_bug_path(@bug) %> |
+  <%= link_to "Back to bugs", project_bugs_path %>
+  <%= button_to "Resolve this bug", update_status_project_bug_path(@project, @bug), turbo_method: :post %>
+
+  <%= button_to "Destroy this bug", [@project, @bug], method: :delete %>
+</div>
