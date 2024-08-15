@@ -1,0 +1,10 @@
+<%if @bugs!= []%>
+<div id="bugs">
+  <% @bugs.each do |bug| %>
+    <%= render bug %>
+    <p>
+      <%= link_to "Show this bug" %>
+    </p>
+  <% end %>
+</div>
+<%end%>

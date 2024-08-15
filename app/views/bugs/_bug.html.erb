@@ -1,17 +1,7 @@
-<div id="<%= dom_id bug %>">
-  <p>
-    <strong>Description:</strong>
-    <%= bug.description %>
-  </p>
+<!-- app/views/bugs/_bug.html.erb -->
 
-  <p>
-    <strong>Status:</strong>
-    <%= bug.status %>
-  </p>
-
-  <p>
-    <strong>Project:</strong>
-    <%= bug.project_id %>
-  </p>
-
+<div class="bug">
+  <p><strong>Title:</strong> <%= bug.project_id %></p>
+  <p><strong>Description:</strong> <%= bug.description %></p>
+  <p><strong>Status:</strong> <%= bug.status %></p>
 </div>

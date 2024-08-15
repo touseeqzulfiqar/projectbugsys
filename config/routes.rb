@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # resources :bugs
   root "projects#index"
   resources :projects do 
+    collection do
+    patch :bulk_update
+  end
     resources :bugs do
       # member do
       #   put :update_status
@@ -10,6 +13,8 @@ Rails.application.routes.draw do
     end
     
   end
+  get "all_bugs", to: "bugs#all_bugs"
+  
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

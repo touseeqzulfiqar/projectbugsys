@@ -7,6 +7,7 @@ class Ability
     if user.manager?
       can [:read, :create], Project
       can [:destroy, :update], Project, id: user.projects.pluck(:id)
+      cannot [:destroy, :update, :create], Bug
     elsif user.QA?
       can :read, Project, id: user.projects.pluck(:id)
       can [:read, :create], Bug
@@ -14,6 +15,7 @@ class Ability
     elsif user.developer?
       can :read, Project, id: user.projects.pluck(:id)
       can :read, Bug, id: user.bugs.pluck(:id)
+      # cannot [:create, :destroy, :update], Bug
     end
 
   end

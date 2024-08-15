@@ -71,3 +71,8 @@ gem "devise", "~> 4.9"
 gem "faker", "~> 3.4"
 
 gem "cancancan", "~> 3.6"
+
+gem "sidekiq", "~> 7.3"
+gem 'pry-rails', :group => :development
+
+gem "byebug", "~> 11.1"

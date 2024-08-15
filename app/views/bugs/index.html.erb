@@ -11,4 +11,6 @@
   <% end %>
 </div>
 
-<%= link_to "New bug", new_project_bug_path(@project) %>
+<%= link_to "New bug", new_project_bug_path(@project), data: { turbo_frame: 'bug' } %>
+
+<%= turbo_frame_tag "bug" %>

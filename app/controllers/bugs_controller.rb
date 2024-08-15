@@ -1,7 +1,11 @@
 class BugsController < ApplicationController
-  before_action :set_project
+  before_action :set_project, only: %i[ index new create edit update destroy show]
   before_action :set_bug, only: %i[ show edit update destroy ]
 
+
+    def all_bugs
+      @bugs = current_user.bugs
+    end
   # GET /bugs or /bugs.json
   def index
     # @bugs = Bug.all
@@ -10,6 +14,7 @@ class BugsController < ApplicationController
 
   # GET /bugs/1 or /bugs/1.json
   def show
+    @bugs = @project.bugs
   end
 
   # GET /bugs/new
@@ -21,6 +26,7 @@ class BugsController < ApplicationController
 
   # GET /bugs/1/edit
   def edit
+    @developer_users = User.developer
   end
 
   # POST /bugs or /bugs.json
@@ -67,7 +73,7 @@ class BugsController < ApplicationController
     @bug = Bug.find(params[:id])
     @bug.status = "Fixed"
     @bug.save
-    redirect_to project_bugs_path(@project)
+    redirect_to all_bugs_path
   end
   private
     # Use callbacks to share common setup or constraints between actions.
