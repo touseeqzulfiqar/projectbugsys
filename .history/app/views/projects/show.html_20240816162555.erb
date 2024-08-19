@@ -1,0 +1,67 @@
+<p style="color: green"><%= notice %></p>
+
+<%# <%= render 'project', project: @project %>
+<table style="width: 80%; border-collapse: collapse; border: 1px solid;">
+<thead>
+  <tr></tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Assigned Users</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>  
+    <td><%= @project.name %></td>
+    <td><%= @project.description %></td>
+    <td><%= @project.users %></td>
+  </tr>
+</tbody>
+</table>
+
+<div>
+  <%if current_user.QA?%>
+  <%= link_to "Add a new bug", new_project_bug_path(@project) %>
+  <%end%>
+  <%# can't use the link without permission %>
+  <%if can? :update, @project%>
+  <%= link_to "Edit this project", edit_project_path(@project) %>
+  <%end%> |
+  <%= link_to "Back to projects", projects_path %>
+  <% if can? :destroy, @project%>
+  <%= button_to "Destroy this project", @project, method: :delete %>
+  <%end%>
+</div>
+
+
+<%# bugs in show %>
+
+
+<%if @bugs!= []%>
+<h1>Bugs</h1>
+
+<div style="display: flex; justify-content: center;">
+  <table style="width: 80%; border-collapse: collapse; border: 1px solid;">
+    <thead>
+      <tr style="border: 1px solid">
+        <th style="border: 1px solid; padding: 8px;">Description</th>
+        <th style="border: 1px solid; padding: 8px;">Status</th>
+        <th style="border: 1px solid; padding: 8px;">Show</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bugs.each do |bug| %>      
+      
+        <tr style="border: 1px solid">
+          <td style="border: 1px solid; padding: 8px;"><%= bug.id%>.<%= bug.description %></td>
+          <td style="border: 1px solid; padding: 8px;"><%= bug.status %></td>
+          <td colspan="2" style="text-align: center; padding: 8px;">
+            <p>
+      <%= link_to "Show this bug", project_bug_path(@project, bug) %>
+    </p>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%end%>

@@ -1,0 +1,22 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Bugs</h1>
+<table>
+  <thead>
+    <tr>
+    <th>Name</th>
+    <th>Description</th>
+    </tr>
+</table>
+<div id="bugs">
+  <% @bugs.each do |bug| %>
+    <%= render bug %>
+    <p>
+      <%= link_to "Show this bug", [@project, bug] %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New bug", new_project_bug_path(@project), data: { turbo_frame: 'bug' } %>
+
+<%= turbo_frame_tag "bug" %>
