@@ -1,0 +1,49 @@
+<%= form_with(model: project, url: project.persisted? ? project_path(project) : projects_path, method: :post) do |form| %>
+  <% if project.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+  <div class="field">
+    <%= form.label :user_id, 'Select Users' %>
+    <%= form.collection_check_boxes :user_ids, User.QA, :id, :email%>
+  </div>
+    <div class="field">
+    <%= form.fields_for :user do |user_form| %>
+
+  <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+
+    <%= form.label :email, style: "display: block" %>
+    <%= form.text_field :name %>
+
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+
+    <%end%>
+  </div>
+
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

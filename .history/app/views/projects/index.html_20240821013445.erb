@@ -1,0 +1,37 @@
+<!-- app/views/projects/index.html.erb -->
+<div style="display: flex; justify-content: space-around;">
+<h1 style="margin: 0">Projects</h1>
+<div><%= current_user.role %></div>
+<%= button_to "Logout", destroy_user_session_path, method: :delete %>
+</div>
+
+<hr />
+<% if can? :create, Project%>
+<div><%= link_to "New project", new_project_path %></div>
+<%end%>
+
+<%= form_with url: projects_path, method: :get, local: true do %>
+  <%= text_field_tag :query, params[:query], placeholder: "Search Projects...",
+   style: "width: 30%; height: 30px;" %>
+  <%= submit_tag "Search", name: nil %>
+<% end %>
+<div style="display: flex; justify-content: center;">
+<table style="width: 80%; border-collapse: collapse; border: 1px solid;">
+  <thead>
+    <tr style="border: 1px solid">
+      <th style="border: 1px solid; padding: 8px;">Name</th>
+      <th style="border: 1px solid; padding: 8px;">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td style="border: 1px solid; padding: 8px;"><%= link_to project.name, project %></td>
+        <td style="border: 1px solid; padding: 8px;"><%= project.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+</div>

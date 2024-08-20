@@ -1,0 +1,19 @@
+/* app/assets/stylesheets/application.css */
+#project-results {
+  margin-top: 20px;
+}
+
+.project-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.project-item h3 {
+  margin-top: 0;
+}
+
+.project-item p {
+  margin-bottom: 5px;
+}

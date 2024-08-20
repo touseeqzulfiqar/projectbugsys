@@ -1,0 +1,4 @@
+<!-- app/views/projects/search.turbo_stream.erb -->
+<%= turbo_stream.replace "project_results" do %>
+  <%= render partial: "project_list", locals: { projects: @projects } %>
+<% end %>

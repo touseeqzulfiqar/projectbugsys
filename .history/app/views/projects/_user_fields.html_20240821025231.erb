@@ -1,0 +1,19 @@
+<!-- app/views/projects/_user_fields.html.erb -->
+<div class="nested-fields">
+  <%= form.label :name, style: "display: block" %>
+  <%= form.text_field :name %>
+
+  <%= form.label :email, style: "display: block" %>
+  <%= form.email_field :email %>
+
+  <%= form.label :role, style: "display: block" %>
+  <%= form.select :role, options_for_select([['Manager', 'manager'], ['QA', 'QA'], ['Developer', 'developer']]), { autofocus: true, autocomplete: 'role' } %>
+
+  <%= form.label :password, style: "display: block" %>
+  <%= form.text_field :password %>
+
+  <%= form.label :password_confirmation, style: "display: block" %>
+  <%= form.text_field :password_confirmation %>
+
+  <button type="icon" class="remove-user-button">Remove User</button>
+</div>
