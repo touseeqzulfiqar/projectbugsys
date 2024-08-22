@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    if user.manager?
+      can [:read, :create, :search], Project
+      can [:destroy, :update], Project, id: user.projects.pluck(:id)
+      cannot [:destroy, :update, :create], Bug
+    elsif user.QA?
+      can :read, Project, id: user.projects.pluck(:id)
+      can [:read, :create], Bug
+      can [:destroy, :update], Bug, id: user.bugs.pluck(:id)
+    elsif user.developer?
+      can :read, Project, id: user.projects.pluck(:id)
+      can :read, Bug, id: user.bugs.pluck(:id)
+      # cannot [:create, :destroy, :update], Bug
+    end
+
+  end
+end

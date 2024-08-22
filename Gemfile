@@ -80,3 +80,5 @@ gem "byebug", "~> 11.1"
 gem "mini_magick", "~> 4.0"
 
 gem "image_processing", "~> 0.11.2"
+
+gem "rack-cors", "~> 2.0"
