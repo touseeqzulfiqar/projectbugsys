@@ -82,3 +82,5 @@ gem "mini_magick", "~> 4.0"
 gem "image_processing", "~> 0.11.2"
 
 gem "rack-cors", "~> 2.0"
+
+gem "pg", "~> 1.5"

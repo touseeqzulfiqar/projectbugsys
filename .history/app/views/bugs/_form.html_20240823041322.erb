@@ -1,0 +1,51 @@
+<%= form_with(model: [project, bug], local: true, data: { controller: "bug" }) do |form| %>
+  <% if bug.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+
+      <ul>
+        <% bug.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="field">
+  <%= form.label :bug_type %><br />
+  <%= form.select :bug_type, options_for_select([['Feature', "feature"], ['Bug', "bug"]]), 
+                  {data-action = change->bug#updateStatus"}  %>
+</div>
+
+<div class="field">
+  <%= form.label :status %><br />
+  <%= form.select :status, options_for_select([['New', "new"], ['Started', "started"], ["Resolved", "resolved"]]), 
+                  { data: { bug_target: "status" } } %>
+</div>
+
+
+  <div>
+    <%= form.label :deadline, style: "display: block" %>
+    <%= form.datetime_select :deadline %>
+  </div>
+
+  <div>
+    <%= form.label :screenshot %>
+    <%= form.file_field :screenshot %>
+  </div>
+
+  <div class="field">
+    <%= form.label :developer_user_id, 'Assign Developer' %>
+    <%= form.select :developer_user_id, options_from_collection_for_select(@developer_users, 'id', 'email'), 
+                    { autofocus: true, autocomplete: 'developer_user_id' } %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
