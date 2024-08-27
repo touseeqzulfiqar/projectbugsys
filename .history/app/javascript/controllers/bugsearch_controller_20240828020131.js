@@ -14,6 +14,7 @@ export default class extends Controller {
 
     if (inputValue === "") {
       this.containerTarget.innerHTML = "";
+      console.log("entered");
     } else {
       fetch("/buglive/suggestions", {
         method: "POST",
@@ -25,18 +26,17 @@ export default class extends Controller {
         },
         body: JSON.stringify({ search: inputValue }),
       })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status}`);
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
-        return response.json();
+        .then((response) => {
+          if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return response.text().then((text) => {
+              throw new Error(text);
+            });
+          }
+          return response.json();
         })
         .then((data) => {
           this.containerTarget.innerHTML = "";
-          console.log("entered");
           if (data.bugs && data.bugs.length > 0) {
             data.bugs.forEach((item) => {
               const a = document.createElement("a");

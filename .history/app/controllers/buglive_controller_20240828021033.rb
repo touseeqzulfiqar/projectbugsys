@@ -6,7 +6,7 @@ class BugliveController < ApplicationController
                .order(:description)
                .limit(10)
   else
-    # @bugs = Bug.all.limit(10)
+    @bugs = Bug.all.limit(10)
   end
 
   render json: { bugs: @bugs }

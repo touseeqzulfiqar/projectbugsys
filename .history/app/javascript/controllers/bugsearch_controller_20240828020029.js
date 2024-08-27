@@ -25,14 +25,14 @@ export default class extends Controller {
         },
         body: JSON.stringify({ search: inputValue }),
       })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status}`);
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
-        return response.json();
+        .then((response) => {
+          if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return response.text().then((text) => {
+              throw new Error(text);
+            });
+          }
+          return response.json();
         })
         .then((data) => {
           this.containerTarget.innerHTML = "";

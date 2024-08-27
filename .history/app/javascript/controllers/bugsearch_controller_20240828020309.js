@@ -41,7 +41,7 @@ export default class extends Controller {
             data.bugs.forEach((item) => {
               const a = document.createElement("a");
               a.href = `/projects/${item.project_id}/bugs/${item.id}`;
-              a.innerHTML = `${item.description} - ${item.status} (${item.bug_type})`;
+              // a.innerHTML = `${item.description} - ${item.status} (${item.bug_type})`;
               this.containerTarget.appendChild(a);
               this.containerTarget.appendChild(document.createElement("br"));
             });

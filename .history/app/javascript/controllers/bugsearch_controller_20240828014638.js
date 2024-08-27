@@ -25,18 +25,17 @@ export default class extends Controller {
         },
         body: JSON.stringify({ search: inputValue }),
       })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status}`);
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
-        return response.json();
+        .then((response) => {
+          if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return response.text().then((text) => {
+              throw new Error(text);
+            });
+          }
+          return response.json();
         })
         .then((data) => {
           this.containerTarget.innerHTML = "";
-          console.log("entered");
           if (data.bugs && data.bugs.length > 0) {
             data.bugs.forEach((item) => {
               const a = document.createElement("a");
@@ -52,7 +51,6 @@ export default class extends Controller {
           }
         })
         .catch((error) => {
-          console.log(error);
           console.error("Error fetching bug suggestions:", error.message);
           this.containerTarget.innerHTML = `<p>An error occurred: ${error.message}. Please try again later.</p>`;
         });

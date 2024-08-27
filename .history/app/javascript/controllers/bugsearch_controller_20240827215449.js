@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
+// Connects to data-controller="bugsearch"
 export default class extends Controller {
   static targets = ["container"];
 
@@ -10,12 +11,12 @@ export default class extends Controller {
   handleChange(e) {
     e.preventDefault();
 
-    const inputValue = e.target.value.trim();
+    const inputValue = e.target.value.trim(); // Trim whitespace
 
     if (inputValue === "") {
-      this.containerTarget.innerHTML = "";
+      this.containerTarget.innerHTML = ""; // Clear existing results if input is empty
     } else {
-      fetch("/buglive/suggestions", {
+      fetch("/live/bugs/suggestions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,27 +24,18 @@ export default class extends Controller {
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content"),
         },
-        body: JSON.stringify({ search: inputValue }),
+        body: JSON.stringify({ search: inputValue }), // Send the entire input value
       })
-      .then((response) => {
-        if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status}`);
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
-        return response.json();
-        })
+        .then((response) => response.json())
         .then((data) => {
-          this.containerTarget.innerHTML = "";
-          console.log("entered");
+          this.containerTarget.innerHTML = ""; // Clear existing results
           if (data.bugs && data.bugs.length > 0) {
             data.bugs.forEach((item) => {
               const a = document.createElement("a");
-              a.href = `/projects/${item.project_id}/bugs/${item.id}`;
+              a.href = `/projects/${item.project_id}/bugs/${item.id}`; // Link to the specific bug
               a.innerHTML = `${item.description} - ${item.status} (${item.bug_type})`;
               this.containerTarget.appendChild(a);
-              this.containerTarget.appendChild(document.createElement("br"));
+              this.containerTarget.appendChild(document.createElement("br")); // Optional: Add a line break between links
             });
           } else {
             const noResults = document.createElement("p");
@@ -52,9 +44,7 @@ export default class extends Controller {
           }
         })
         .catch((error) => {
-          console.log(error);
-          console.error("Error fetching bug suggestions:", error.message);
-          this.containerTarget.innerHTML = `<p>An error occurred: ${error.message}. Please try again later.</p>`;
+          console.error("Error fetching search results:", error);
         });
     }
   }
