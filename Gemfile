@@ -84,3 +84,5 @@ gem "image_processing", "~> 0.11.2"
 gem "rack-cors", "~> 2.0"
 
 gem "pg", "~> 1.5"
+
+gem "pry-byebug", "~> 3.10"

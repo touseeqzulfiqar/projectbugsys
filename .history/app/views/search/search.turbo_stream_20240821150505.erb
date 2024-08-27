@@ -1,6 +1,0 @@
-<%# <% turbo_stream.update "projects_id", partial: "projects/project", collection: @projects %> 
-<%turbo_stream.replace "projects_id" do%>
-    <% @projects.each do |project| %>
-      <%= render "projects/project", project: project %>
-    <% end %>
-<%end%>

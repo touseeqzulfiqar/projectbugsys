@@ -1,8 +1,0 @@
-<!-- app/views/search/suggestion.turbo_stream.erb -->
-<turbo-stream target="projects_id" action="replace">
-  <template>
-    <% @projects.each do |project| %>
-      <%= render "projects/project", project: project %>
-    <% end %>
-  </template>
-</turbo-stream>

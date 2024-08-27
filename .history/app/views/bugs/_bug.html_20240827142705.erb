@@ -1,0 +1,34 @@
+<div class="bug">
+  <% if bug.developer_id.present? %>
+    <p><strong>Title:</strong> <%= bug.project_id %></p>
+    <p><strong>Description:</strong> <%= bug.description %></p>
+
+    <%= form_with model: bug, url: project_bug_path(bug.project_id, bug), local: true do |form| %>
+      <p><strong>Status:</strong></p>
+      <%= form.select :status, options_for_select(
+        bug.bug_type == "feature" ?
+        [['New', "new"], ["Started", "started"], ["Completed", "completed"]] :
+        [['New', "new"], ["Started", "started"], ["Resolved", "resolved"]],
+        bug.status
+      ) %>
+      <p><strong>Deadline:</strong> <%= bug.deadline %></p>
+      <p><strong>Bug Type:</strong> <%= bug.bug_type %></p>
+
+      <%= form.submit "Update Status" %>
+    <% end %>
+  <% else %>
+    <p><strong>Title:</strong> <%= bug.project_id %></p>
+    <p><strong>Description:</strong> <%= bug.description %></p>
+    <p style="color: red"><strong>Status:</strong> <%= bug.status %></p>
+    <p><strong>Deadline:</strong> <%= bug.deadline %></p>
+    <p><strong>Bug Type:</strong> <%= bug.bug_type %></p>
+  <% end %>
+
+  <div>
+    <% if bug.screenshot.attached? %>
+      <%= image_tag bug.screenshot, style: "width: 250px; height: 200px;" %>
+    <% end %>
+  </div>
+
+  <%= link_to "Show this bug", project_bug_path(bug.project_id, bug) %>
+</div>

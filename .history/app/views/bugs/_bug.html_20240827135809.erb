@@ -1,0 +1,25 @@
+<!-- app/views/bugs/_bug.html.erb -->
+
+<div class="bug">
+  <%if bug.developer_id != nil%>
+  <p><strong>Title:</strong> <%= bug.project_id %></p>
+  <p><strong>Description:</strong> <%= bug.description %></p>
+  
+  <p><strong>Deadline:</strong> <%= bug.deadline %></p>
+  <p><strong>Bug Type:</strong> <%= bug.bug_type %></p>
+<%else%>
+<p><strong>Title:</strong> <%= bug.project_id %></p>
+  <p><strong>Description:</strong> <%= bug.description %></p>
+  <p style="color: red"><strong>Status:</strong> <%= bug.status %></p>
+  <p><strong>Deadline:</strong> <%= bug.deadline %></p>
+  <p><strong>Bug Type:</strong> <%= bug.bug_type %></p>
+  <%end%>
+ <div>
+  <% if bug.screenshot.attached? %>
+    <%= image_tag bug.screenshot, style: "width: 250px; height: 200px;" %>
+  <% end %>
+</div> 
+
+<%= link_to "Show this bug", project_bug_path(bug.project_id, bug) %>
+
+</div>

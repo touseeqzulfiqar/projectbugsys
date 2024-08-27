@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <title>New Project Assignment</title>
+  </head>
+
+  <body>
+    <h2>Project Assignment Notification</h2>
+    
+    <p>Dear QA Team,</p>
+    
+    <p>I hope this email finds you well. We have a new project that needs your immediate attention.</p>
+    
+    <p>
+      <strong>Project Name:</strong> <%= @project.name %><br>
+      <strong>Assigned By:</strong> <%= @qa_user.email %><br>
+    </p>
+
+    <p>
+      Please find the project details below:
+    </p>
+
+    <p>
+      <strong>Project Description:</strong><br>
+      <%= @project.description %>
+    </p>
+    
+    <p>
+      <strong>Tasks Assigned</strong>
+    </p>
+
+    <p>
+      Please ensure that all testing is completed before the deadline. If there are any issues or if you need further clarification, feel free to reach out to me.
+    </p>
+    
+    <p>
+      Thank you for your hard work and dedication.
+    </p>
+    
+    <p>Best regards,</p>
+    <p><%= @qa_user.email %></p>
+  </body>
+</html>

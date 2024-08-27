@@ -15,7 +15,7 @@ class Ability
     elsif user.developer?
       can :read, Project, id: user.projects.pluck(:id)
       can :read, Bug, id: user.bugs.pluck(:id)
-      # cannot [:create, :destroy, :update], Bug
+      cannot [:create, :destroy], Bug
     end
 
   end
