@@ -8,6 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 require 'faker'
-200.times do
+10.times do
   Project.create!(name: Faker::Book.title, description: Faker::Lorem.sentence)
 end

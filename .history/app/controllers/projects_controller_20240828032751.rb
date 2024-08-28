@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
       @pagy, @projects = pagy(Project.all)
       @bugs = current_user.bugs
     elsif current_user.QA?
-      @pagy, @projects = pagy(current_user.projects)
+      @projects = current_user.projects
       @bugs = current_user.bugs
     else
       redirect_to all_bugs_path

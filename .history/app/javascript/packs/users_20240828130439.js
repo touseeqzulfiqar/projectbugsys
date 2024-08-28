@@ -7,20 +7,15 @@ document.addEventListener("turbo:load", function () {
 
   // Check if elements exist
   if (addUserButton && usersFields) {
-    // Store the template of the user fields
-    let template = document.createElement("div");
-    template.innerHTML = usersFields.querySelector(".nested-fields").outerHTML;
+    // Clone the structure of the user fields
+    let template = usersFields.querySelector(".nested-fields").cloneNode(true);
 
-    // Initially, hide or clear the usersFields container
-    usersFields.innerHTML = "";
+    // Clear the input values in the cloned template
+    template.querySelectorAll("input").forEach((input) => (input.value = ""));
 
     // Add event listener to the button
     addUserButton.addEventListener("click", function () {
-      let newUserField = document.createElement("div");
-      newUserField.innerHTML = template.innerHTML;
-      newUserField
-        .querySelectorAll("input")
-        .forEach((input) => (input.value = ""));
+      let newUserField = template.cloneNode(true);
       usersFields.appendChild(newUserField);
     });
 

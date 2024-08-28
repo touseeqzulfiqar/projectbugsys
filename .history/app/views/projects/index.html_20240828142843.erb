@@ -51,7 +51,7 @@
     <div style="display: flex; gap: 5px;">
       <% @pagy.series.each do |page| %>
         <% if page.is_a?(Integer) %>
-          <a href="<%= url_for(page: page) %>" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none;">
+          <a href="<%= url_for(page: page) %>" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #007bff;">
             <%= page %>
           </a>
         <% elsif page.is_a?(String) %>
