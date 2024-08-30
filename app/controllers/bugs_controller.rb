@@ -1,41 +1,29 @@
 class BugsController < ApplicationController
-  before_action :set_project, only: %i[index new create edit update destroy show assign show]
-  before_action :set_bug, only: %i[show edit update destroy]
+  before_action :set_project, only: %i[index new create edit update destroy show assign]
+  before_action :set_bug, only: %i[show edit update destroy assign update_status]
 
-  def all_bugs
-    @bugs = Bug.joins(:project)
-               .where(projects: { id: current_user.projects.ids })
-               .where('bugs.developer_id = ? OR bugs.developer_id IS NULL', current_user.id)
+  def index
+    @bugs = @project.bugs.accessible_by(current_ability)
   end
 
-  # GET /bugs or /bugs.json
-  def index
-  @bugs = @project.bugs.accessible_by(current_ability)
-end
-
-
-  # GET /bugs/1 or /bugs/1.json
   def show
     @bugs = @project.bugs
   end
 
-  # GET /bugs/new
   def new
-    @bug = Bug.new
+    @bug = @project.bugs.new
     @developer_users = User.developer
-    # @project = Project.find(params[:project_id])
   end
 
-  # GET /bugs/1/edit
   def edit
     @developer_users = User.developer
   end
 
-  # POST /bugs or /bugs.json
   def create
     @bug = @project.bugs.new(bug_params)
-    @bug.user = current_user  # Set the user_id to the current user's ID
-    @bug.developer_id = nil   # Ensure developer_id is null
+    @bug.user = current_user
+    @bug.developer_id = nil
+
     respond_to do |format|
       if @bug.save
         format.html { redirect_to project_bug_path(@project, @bug), notice: 'Bug was successfully created.' }
@@ -47,7 +35,6 @@ end
     end
   end
 
-  # PATCH/PUT /bugs/1 or /bugs/1.json
   def update
     respond_to do |format|
       if @bug.update(bug_params)
@@ -60,7 +47,6 @@ end
     end
   end
 
-  # DELETE /bugs/1 or /bugs/1.json
   def destroy
     @bug.destroy!
 
@@ -70,15 +56,7 @@ end
     end
   end
 
-  def status_update
-    @bug = Bug.find(params[:id])
-    @bug.status = 'Fixed'
-    @bug.save
-    redirect_to all_bugs_path
-  end
-
   def assign
-    @bug = Bug.find(params[:id])
     if @bug.update(developer_id: params[:bug][:developer_id])
       redirect_to project_bug_path(@project, @bug), notice: 'Bug assigned successfully.'
     else
@@ -87,7 +65,6 @@ end
   end
 
   def update_status
-    @bug = Bug.find(params[:id])
     if @bug.update(status: params[:bug][:status])
       redirect_to bugs_path, notice: 'Bug status was successfully updated.'
     else
@@ -97,17 +74,15 @@ end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_bug
     @bug = Bug.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
-  def bug_params
-    params.require(:bug).permit(:title, :description, :status, :project_id, :deadline, :bug_type, :screenshot)
-  end
-
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  def bug_params
+    params.require(:bug).permit(:title, :description, :status, :project_id, :deadline, :bug_type, :screenshot)
   end
 end
