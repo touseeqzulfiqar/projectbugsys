@@ -1,0 +1,106 @@
+<h1>New Project</h1>
+
+<%= render "form", project: @project, qa_users: @qa_users, developer_users: @developer_users %>
+
+<div>
+  <button type="button" id="add-role-btn">Add Role</button>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addRoleBtn = document.getElementById("add-role-btn");
+    const roleFieldsContainer = document.getElementById("role-fields-container");
+
+    const qaUsers = <%= raw(@qa_users.to_json) %>;
+    const developerUsers = <%= raw(@developer_users.to_json) %>;
+
+    function createRoleFields() {
+      const newField = document.createElement("div");
+      newField.classList.add("role-field");
+
+      newField.innerHTML = `
+        <div class="field">
+          <label>Select Role</label>
+          <select class="role-select">
+            <option value="">Select Role</option>
+            <option value="qa">QA</option>
+            <option value="developer">Developer</option>
+          </select>
+        </div>
+        <div class="field qa-users-dropdown" style="display: none;">
+          <label>Select QA Users</label>
+          <select class="user-select" multiple>
+            ${getUserOptions("qa")}
+          </select>
+        </div>
+        <div class="field developer-users-dropdown" style="display: none;">
+          <label>Select Developer Users</label>
+          <select class="user-select" multiple>
+            ${getUserOptions("developer")}
+          </select>
+        </div>
+        <button type="button" class="remove-role-btn">Remove Role</button>
+      `;
+
+      roleFieldsContainer.appendChild(newField);
+
+      const roleSelect = newField.querySelector(".role-select");
+      const qaDropdown = newField.querySelector(".qa-users-dropdown");
+      const developerDropdown = newField.querySelector(".developer-users-dropdown");
+      const userSelect = newField.querySelector(".user-select");
+
+      roleSelect.addEventListener("change", function () {
+        qaDropdown.style.display = "none";
+        developerDropdown.style.display = "none";
+
+        if (this.value === "qa") {
+          qaDropdown.style.display = "block";
+        } else if (this.value === "developer") {
+          developerDropdown.style.display = "block";
+        }
+      });
+
+      userSelect.addEventListener("change", updateUserOptions);
+    }
+
+    function getUserOptions(role) {
+      const selectedUsers = Array.from(document.querySelectorAll(".user-select"))
+        .flatMap(select => Array.from(select.options))
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+      let users = role === "qa" ? qaUsers : developerUsers;
+      users = users.filter(user => !selectedUsers.includes(user.id.toString()));
+
+      return users
+        .map(user => `<option value="${user.id}">${user.email}</option>`)
+        .join("");
+    }
+
+    function updateUserOptions() {
+      const allRoleFields = document.querySelectorAll(".role-field");
+
+      allRoleFields.forEach(field => {
+        const roleSelect = field.querySelector(".role-select").value;
+        const userSelect = field.querySelector(".user-select");
+
+        if (roleSelect === "qa") {
+          userSelect.innerHTML = getUserOptions("qa");
+        } else if (roleSelect === "developer") {
+          userSelect.innerHTML = getUserOptions("developer");
+        }
+      });
+    }
+
+    addRoleBtn.addEventListener("click", function () {
+      createRoleFields();
+    });
+
+    document.addEventListener("click", function (event) {
+      if (event.target.classList.contains("remove-role-btn")) {
+        event.target.closest(".role-field").remove();
+        updateUserOptions();
+      }
+    });
+  });
+</script>
