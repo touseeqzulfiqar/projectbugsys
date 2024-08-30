@@ -1,0 +1,25 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Bugs</h1>
+<%# search %>
+
+<div style="position: relative; width:70%; margin: 0 auto" data-controller="bug">
+  <%= form_with(url: live_suggestions_path, method: :post, local: true, data: { action: 'input->search#handleChange' }) do |f| %>
+    <%= f.search_field :search, placeholder: 'Search here', style: 'width: 100%;' %>
+  <% end %>
+  <div data-search-target="container" id="suggestions" style="position: absolute; border: 1px solid #ccc; top: 100%; width: 100%; max-height: 100px; overflow-y: auto; background: black; z-index: 10;"></div>
+</div>
+
+<%# <%end%>
+<div id="bugs">
+  <% @bugs.each do |bug| %>
+    <%= render bug %>
+    <p>
+      <%= link_to "Show this bug", [@project, bug] %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New bug", new_project_bug_path(@project), data: { turbo_frame: 'bug' } %>
+
+<%= turbo_frame_tag "bug" %>

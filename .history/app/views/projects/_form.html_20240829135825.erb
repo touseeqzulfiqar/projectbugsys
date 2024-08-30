@@ -1,0 +1,51 @@
+<%= form_with(model: project) do |form| %>
+  <% if project.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(project.errors.count, "error") %> prohibited this project from being saved:</h2>
+      <ul>
+        <% project.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+<%#  %>
+
+<div id="developer-fields-container"></div>
+
+<div class="field">
+  <button type="button" id="add-developer-btn">Add Developer</button>
+</div>
+<%= form.hidden_field :user_ids, value: selectedDevelopers.join(",") %>
+  
+
+<%#  %>
+
+  <%# <div id="users-fields"> %>
+    <%# <%= form.fields_for :users do |user_fields| %> 
+      <%# <% unless user_fields.object == current_user %> 
+        <%# <div class="nested-fields"> %>
+          <%# <%= render 'user_fields', f: user_fields %> 
+        <%# </div> %>
+      <%# <% end %> 
+    <%# <% end %> 
+  <%# </div> %>
+
+  <%# <div>
+    <button type="button" id="add-user-button">Add More User</button>
+  </div> %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

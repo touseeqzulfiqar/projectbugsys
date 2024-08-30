@@ -1,0 +1,18 @@
+<div class="nested-fields">
+  <%= f.label :email %>
+  <%= f.text_field :email %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+
+  <%= f.label :role %><br />
+  <%= f.select :role, options_for_select([['Manager', "manager"], ['QA', "QA"], ["Developer", "developer"]]), { autofocus: true, autocomplete: 'role' } %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+
+  <%= f.label :password_confirmation %>
+  <%= f.password_field :password_confirmation %>
+
+  <button type="button" class="remove-user-button">Remove</button>
+</div>

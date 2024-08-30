@@ -1,0 +1,85 @@
+class ProjectsController < ApplicationController
+  before_action :set_project, only: %i[show edit update destroy status_update]
+  load_and_authorize_resource
+
+  def index
+    if current_user.manager?
+      @pagy, @projects = pagy(Project.all)
+      @bugs = current_user.bugs
+    elsif current_user.QA?
+      @pagy, @projects = pagy(current_user.projects)
+      @bugs = current_user.bugs
+    else
+      redirect_to all_bugs_path
+    end
+  end
+
+  def show
+    @bugs = @project.bugs
+  end
+
+  def new
+    @project = Project.new
+    @project.users.build
+    @qa_users = User.QA
+    @developer_users = User.developer
+  end
+
+  def edit
+    @qa_users = User.QA
+    @developer_users = User.developer
+    @project.users.build unless @project.users.any?
+  end
+
+  def create
+    @project = Project.new(project_params)
+
+    if @project.save
+      @project.users << User.where(id: params[:project][:developer_ids]) if params[:project][:developer_ids].present?
+      current_user.projects << @project unless @project.users.include?(current_user)
+
+      redirect_to project_url(@project), notice: 'Project was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @project.update(project_params)
+      @project.users.clear
+      @project.users << User.where(id: params[:project][:developer_ids]) if params[:project][:developer_ids].present?
+      current_user.projects << @project unless @project.users.include?(current_user)
+
+      redirect_to project_url(@project), notice: 'Project was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @project.destroy
+    redirect_to projects_url, notice: 'Project was successfully destroyed.'
+  end
+
+  def status_update
+    @bug = @project.bugs.find_by(id: params[:bug_id])
+    if @bug
+      @bug.update(status: 'resolved')
+      redirect_to project_path(@project), notice: 'Bug was successfully resolved.'
+    else
+      redirect_to project_path(@project), alert: 'Bug not found.'
+    end
+  end
+
+  private
+
+  def set_project
+    @project = Project.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to projects_path, alert: 'Project not found.'
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :description, user_ids: [], developer_ids: [])
+  end
+end

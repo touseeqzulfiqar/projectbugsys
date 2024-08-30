@@ -1,8 +1,0 @@
-<h1>Bugs</h1>
-<%= button_to "Logout", destroy_user_session_path, method: :delete %>
-<% @bugs.each do |bug| %>
-    <%= render bug %>
-    <p>
-      <%= button_to "Resolve this bug", status_update_project_bug_path(bug.project_id, bug), turbo_method: :post %>
-    </p>
-<% end %>

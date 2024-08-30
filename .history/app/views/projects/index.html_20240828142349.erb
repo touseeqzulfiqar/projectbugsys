@@ -1,0 +1,78 @@
+
+<div style="display: flex; justify-content: space-around;">
+  <h1 style="margin: 0">Projects</h1>
+<div><%= current_user.role %></div>
+<%= button_to "Logout", destroy_user_session_path, method: :delete %>
+</div>
+
+<hr />
+<% if can? :create, Project%>
+<div><%= link_to "New project", new_project_path %></div>
+<%end%>
+<%# search %>
+<div style="position: relative; width:70%; margin: 0 auto" data-controller="search">
+  <%= form_with(url: live_suggestions_path, method: :post, local: true, data: { action: 'input->search#handleChange' }) do |f| %>
+    <%= f.search_field :search, placeholder: 'Search here', style: 'width: 100%;' %>
+  <% end %>
+  <div data-search-target="container" id="suggestions" style="position: absolute; border: 1px solid #ccc; top: 100%; width: 100%; max-height: 100px; overflow-y: auto; background: black; z-index: 10;"></div>
+</div>
+
+
+
+
+<%# end %>
+
+
+<% if @pagy.pages > 1 %>
+  <nav class="custom-pagination">
+    <ul class="pagination">
+      <%== pagy_prev_link(@pagy, 'Prev', class: 'prev-page') || '<span class="prev-page disabled">Prev</span>' %>
+      <% @pagy.series.each do |page| %>
+        <% if page.is_a?(Integer) %>
+          <li class="page-item <%= 'active' if page == @pagy.page %>">
+            <%= link_to page, url_for(page: page), class: 'page-link' %>
+          </li>
+        <% elsif page.is_a?(String) %>
+          <li class="page-item"><span class="page-link"><%= page %></span></li>
+        <% end %>
+      <% end %>
+      <%== pagy_next_link(@pagy, 'Next', class: 'next-page') || '<span class="next-page disabled">Next</span>' %>
+    </ul>
+  </nav>
+<% end %>
+
+
+<div style="display: flex; justify-content: center;">
+  <table style="width: 80%; border-collapse: collapse; border: 1px solid; width: 100%">
+    <thead>
+      <tr style="border: 1px solid">
+        <th style="border: 1px solid; padding: 8px;">Name</th>
+        <th style="border: 1px solid; padding: 8px;">Description</th>
+        <th style="border: 1px solid; padding: 8px;">Assigned Users</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @projects.each do |project| %>
+        <tr style="border: 1px solid; ">
+          <td style="border: 1px solid; padding: 8px;"><%= project.id%>.<%= link_to project.name, project %></td>
+          <td style="border: 1px solid; padding: 8px;"><%= project.description %></td>
+          <td style="border: 1px solid; padding: 8px;"><%= project.users.map(&:email).join(", ") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%if @bugs!= []%>
+<h1>Bugs</h1>
+<div id="bugs">
+  <% @bugs.each do |bug| %>
+    <%= render bug %>
+    <p>
+      <%# <%= button_to "Resolve this bug", status_update_project_bug_path(@project, bug), turbo_method: :post %> 
+    </p>
+  <% end %>
+</div>
+<%end%>
+
+
+

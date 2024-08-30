@@ -1,0 +1,16 @@
+<script>
+  const developerUsers = <%= raw(@developer_users.to_json) %>;
+</script>
+<%= form.hidden_field :user_ids, value: selectedDevelopers.join(",") %>
+
+
+
+<h1>New project</h1>
+
+<%= render "form", project: @project, qa_users: @qa_users %>
+
+<br>
+
+<div>
+  <%= link_to "Back to projects", projects_path %>
+</div>
