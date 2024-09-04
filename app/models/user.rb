@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-
+  validates :email, uniqueness: true
+  validates :name, :role, presence: true
   has_many :user_projects
   has_many :projects, through: :user_projects
   has_many :bugs
