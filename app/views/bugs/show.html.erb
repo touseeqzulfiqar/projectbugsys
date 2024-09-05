@@ -3,20 +3,20 @@
 <%= render @bug %>
 
 <div>
-  
-
   <% if current_user.developer? %>
-  <%= form_with(model: @bug, url: assign_project_bug_path(@project, @bug), method: :patch, local: true) do |form| %>
-    <div class="form-group">
-      <%= form.label :developer_id, "Assign to yourself" %>
-      <%= form.select :developer_id, options_for_select([['Assign to me', current_user.id]] + User.where(role: 'Developer').map { |user| [user.email, user.id] }, @bug.developer_id), { include_blank: 'Unassigned' }, class: "form-select" %>
-    <%= form.submit "Assign", class: "btn btn-primary" %>
-    </div>
+    <%= form_with(model: @bug, url: assign_project_bug_path(@project, @bug), method: :patch, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :developer_id, "Assign to yourself" %>
+        <%= form.select :developer_id, options_for_select([['Assign to me', current_user.id]] + User.where(role: 'Developer').map { |user| [user.email, user.id] }, @bug.developer_id), { include_blank: 'Unassigned' }, class: "form-select" %>
+        <%= form.submit "Assign", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   <% end %>
-  <%end%>
-<%= link_to "Edit this bug", edit_project_bug_path(@project, @bug) %> 
+
+  <%= link_to "Edit this bug", edit_project_bug_path(@project, @bug) %> 
   <%= link_to "Back", root_path %>
- <% if can? :destroy, @bug %>
-  <%= button_to "Destroy this bug", [@project, @bug], method: :delete, data: { confirm: "Are you sure?" } %>
-<% end %>
+
+  <% if current_user.manager? || (current_user.QA? && @bug.user_id == current_user.id) %>
+    <%= button_to "Destroy this bug", [@project, @bug], method: :delete, data: { confirm: "Are you sure?" } %>
+  <% end %>
 </div>
