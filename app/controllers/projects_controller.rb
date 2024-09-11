@@ -1,17 +1,21 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[show edit update destroy status_update]
-  load_and_authorize_resource
+  # load_and_authorize_resource except: %i[show]
 
   def index
-    @pagy, @projects = pagy(Project.accessible_by(current_ability))
-    @bugs = Bug.accessible_by(current_ability)
+    # @pagy, @projects = pagy(Project.accessible_by(current_ability))
+    # @bugs = Bug.accessible_by(current_ability)
+    @projects = Project.all
+    render json: { projects: @projects }
   end
 
   def show
+    authorize! :read, @project
     @bugs = @project.bugs
   end
 
   def new
+    authorize! :create, Project
     @project = Project.new
     @project.users.build
     @qa_users = User.QA
@@ -20,6 +24,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    authorize! :update, @project
     @qa_users = User.QA
     @developer_users = User.developer.where.not(id: @project.users.pluck(:id))
     @selected_developer_users = @project.users.developer
@@ -28,10 +33,11 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
+    authorize! :create, @project
     @project.creator_id = current_user.id
     if @project.save
       assign_developers_to_project
-      #  Assign the current user to the creator_id in projects
+      # Assign the current user to the creator_id in projects
       current_user.projects << @project unless @project.users.include?(current_user)
       redirect_to project_url(@project), notice: 'Project was successfully created.'
     else
@@ -40,6 +46,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
+    authorize! :update, @project
     if @project.update(project_params)
       @project.users.clear
       assign_developers_to_project
@@ -51,9 +58,14 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project.destroy
-    redirect_to projects_url, notice: 'Project was successfully destroyed.'
-  end
+  @project = Project.find(params[:id])  # Initialize @project
+  authorize! :destroy, @project
+  @project.destroy
+  redirect_to projects_url, notice: 'Project was successfully destroyed.'
+rescue CanCan::AccessDenied
+  head :forbidden
+end
+
 
   def status_update
     @bug = @project.bugs.find_by(id: params[:bug_id])

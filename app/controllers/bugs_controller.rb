@@ -1,6 +1,8 @@
 class BugsController < ApplicationController
   before_action :set_project, only: %i[index new create edit update destroy show assign]
   before_action :set_bug, only: %i[show edit update destroy assign update_status]
+  before_action :authenticate_user!
+  load_and_authorize_resource :bug, through: :project, only: %i[create update destroy] # CanCanCan authorization
 
   def index
     @bugs = @project.bugs.accessible_by(current_ability)
@@ -11,6 +13,7 @@ class BugsController < ApplicationController
   end
 
   def new
+    authorize! :create, Bug  # Ensure only users with create permissions can access
     @bug = @project.bugs.new
     @developer_users = User.developer
   end
@@ -20,6 +23,8 @@ class BugsController < ApplicationController
   end
 
   def create
+    authorize! :create, Bug  # Check authorization for bug creation
+
     @bug = @project.bugs.new(bug_params)
     @bug.user = current_user
     @bug.developer_id = nil
@@ -36,6 +41,8 @@ class BugsController < ApplicationController
   end
 
   def update
+    authorize! :update, @bug # Ensure update permissions
+
     respond_to do |format|
       if @bug.update(bug_params)
         format.html { redirect_to project_bug_path(@project, @bug), notice: 'Bug was successfully updated.' }
@@ -48,6 +55,8 @@ class BugsController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @bug # Ensure proper authorization
+
     @bug.destroy!
 
     respond_to do |format|

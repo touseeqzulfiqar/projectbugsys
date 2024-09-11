@@ -1,7 +1,7 @@
 # spec/factories/bugs.rb
 FactoryBot.define do
   factory :bug do
-    title { 'Test Bug' }
+    title { Faker::Lorem.sentence }
     status { :started } # Use symbols for enum values
     bug_type { :bug } # Use symbols for enum values
     association :project
