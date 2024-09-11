@@ -1,12 +1,12 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[show edit update destroy status_update]
-  # load_and_authorize_resource except: %i[show]
+  load_and_authorize_resource except: %i[show]
 
   def index
-    # @pagy, @projects = pagy(Project.accessible_by(current_ability))
-    # @bugs = Bug.accessible_by(current_ability)
-    @projects = Project.all
-    render json: { projects: @projects }
+    @pagy, @projects = pagy(Project.accessible_by(current_ability))
+    @bugs = Bug.accessible_by(current_ability)
+    # @projects = Project.all
+    # render json: { projects: @projects }
   end
 
   def show
